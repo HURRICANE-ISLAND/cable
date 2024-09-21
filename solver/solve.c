@@ -1342,6 +1342,7 @@ int CheckDynstatConvergence(node, num_nodes, dt, scalv, ndof, twoD)
    double	  dt;
    double	 *scalv;
    int		  ndof;
+   int        twoD;
 {
    int		i;
    int		j;

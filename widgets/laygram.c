@@ -17,6 +17,8 @@ static char LayYYsccsid[] = "@(#)yaccpar	1.8 (Berkeley) 01/20/90";
 #include    "LayoutP.h"
 
 static LayoutPtr    *dest;
+int LayYYlex();
+void LayYYerror(char *s);
 
 #line 17 "laygram.y"
 typedef union {

@@ -27,19 +27,22 @@ ifeq ($(OS),OSX-universal)
 else ifeq ($(OS),OSX)
     CFLAGS = -Wall -O2 -g -I../include -mmacosx-version-min=10.4
 else
-    CFLAGS = -Wall -O2 -g -I../include -I/opt/x11/include
+    # CFLAGS = -Wall -O2 -g -I../include -I/opt/x11/include
+    CFLAGS = -O2 -g -I../include -I/opt/x11/include
 endif
 
 LIB	= libwidgets.a
-OBJS = post.o tabgroup.o scroll.o util.o outputdialog.o
-LOBJS = Layout.o laygram.o laylex.o
-
-all: $(LIB)
+OBJS = post.o tabgroup.o scroll.o util.o outputdialog.o \
+ Layout.o laylex.o laygram.o 
 
 clean:
-	@rm -f $(OBJS) $(LOBJS) $(LIB)
+	@rm -f $(OBJS) $(LIB)
 
-$(LIB): $(OBJS) $(LOBJS)
-		rm -f $(LIB)
-		ar cq $(LIB) $(OBJS) $(LOBJS)
-		ranlib $(LIB)
+$(LIB): $(OBJS)
+	rm -f $@
+	ar cq $@ $^
+	ranlib $@
+
+all: $(OBJS)
+
+.PHONY: test

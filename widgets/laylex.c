@@ -1,6 +1,7 @@
 static int count ( );
 
 # include <stdio.h>
+# include <stdlib.h>
 # define U(x) x
 # define NLSTATE LayYYprevious=YYNEWLINE
 # define BEGIN LayYYbgin = LayYYsvec + 1 +
@@ -69,7 +70,7 @@ static char *LayYYsourcebase, *LayYYsource;
 #define unput(c)    (--LayYYsource)
 
 # define YYNEWLINE 10
-LayYYlex(){
+int LayYYlex(){
 int nstr; extern int LayYYprevious;
 while((nstr = LayYYlook()) >= 0)
 LayYYfussy: switch(nstr){
@@ -237,13 +238,13 @@ count (s, c)
     return i;
 }
 
-LayYYsetsource(s)
+void LayYYsetsource(s)
     char    *s;
 {
     LayYYsourcebase = LayYYsource = s;
 }
 
-LayYYerror(s)
+void LayYYerror(s)
     char    *s;
 {
     char    *t;

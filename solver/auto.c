@@ -39,6 +39,7 @@
 # include "error.h"
 # include "solve.h"
 # include "control.h"
+# include "output.h"
 
 extern Problem     *problem;             
 extern Environment *environment;

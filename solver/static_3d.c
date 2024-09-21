@@ -41,6 +41,7 @@
 # include "solve.h"
 # include "transforms.h"
 # include "segments.h"
+# include "control.h"
 
 # define SQR(a) ((a)*(a))
 

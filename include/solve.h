@@ -27,7 +27,7 @@
  *		2- and 3-D static and dynamic mooring models		*
  ************************************************************************/
 
-# ifndef _SOLVEL_H
+# ifndef _SOLVE_H
 # define _SOLVE_H
 # include "model.h"
 

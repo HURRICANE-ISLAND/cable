@@ -40,6 +40,7 @@
 # include "output.h"
 # include "solve.h"
 # include "segments.h"
+# include "control.h"
 
 # define SQR(a) ((a)*(a))
 #define DBL_EPSILON 1e-12

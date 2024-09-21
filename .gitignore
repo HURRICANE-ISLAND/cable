@@ -1,3 +1,7 @@
 .DS_Store
 *.o
 *.a
+model/parser.output
+model/lexer.c
+model/parser.c
+model/parser.h

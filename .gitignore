@@ -5,3 +5,6 @@ model/parser.output
 model/lexer.c
 model/parser.c
 model/parser.h
+cable
+res2mat
+res2asc

@@ -4,6 +4,7 @@
 #
 #    Copyright (C) 1997-2012 by Woods Hole Oceanographic Institution (WHOI)
 #    and Jason Gobat
+#                            by Hurricane Island
 #
 #    WHOI Cable is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,31 +20,26 @@
 #    along with WHOI Cable.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-CC       = gcc
-CFLAGS   = -O2 -g -I../include 
-AR       = ar cq
-RANLIB   = ranlib
-
 ifeq ($(OS),OSX-universal)
     CFLAGS = -Wall -O2 -g -I../include \
              -force_cpusubtype_ALL -mmacosx-version-min=10.4 \
              -arch i386 -arch ppc
 else ifeq ($(OS),OSX)
-    CFLAGS   = -Wall -O2 -g -I../include -mmacosx-version-min=10.4
+    CFLAGS = -Wall -O2 -g -I../include -mmacosx-version-min=10.4
 else
-    CFLAGS   = -Wall -O2 -g -I../include 
+    CFLAGS = -Wall -O2 -g -I../include -I/opt/x11/include
 endif
 
 LIB	= libwidgets.a
-OBJS	= post.o tabgroup.o scroll.o util.o outputdialog.o
-LOBJS   = Layout.o laygram.o laylex.o
-# LOBJS	= 
+OBJS = post.o tabgroup.o scroll.o util.o outputdialog.o
+LOBJS = Layout.o laygram.o laylex.o
 
-all:            $(LIB)
+all: $(LIB)
 
-clean:;         @rm -f $(OBJS) $(LOBJS) $(LIB)
+clean:
+	@rm -f $(OBJS) $(LOBJS) $(LIB)
 
-$(LIB):         $(OBJS) $(LOBJS)
+$(LIB): $(OBJS) $(LOBJS)
 		rm -f $(LIB)
-		$(AR) $(LIB) $(OBJS) $(LOBJS)
-		$(RANLIB) $(LIB)
+		ar cq $(LIB) $(OBJS) $(LOBJS)
+		ranlib $(LIB)

@@ -2,6 +2,7 @@
  * $XConsortium: Layout.c,v 1.1 91/09/13 18:51:44 keith Exp $
  *
  * Copyright 1991 Massachusetts Institute of Technology
+ *           2024 Hurricane Island
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -34,6 +35,7 @@
 
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 /*****************************************************************************
  *

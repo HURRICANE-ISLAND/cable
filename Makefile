@@ -3,6 +3,7 @@
 #    analysis of oceanographic cable structures.
 #
 #    Copyright (C) 2013-2016 by Jason Gobat
+#                  2024      by Hurricane Island
 #
 #    WHOI Cable is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by

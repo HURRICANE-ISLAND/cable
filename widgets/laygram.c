@@ -6,6 +6,8 @@ static char LayYYsccsid[] = "@(#)yaccpar	1.8 (Berkeley) 01/20/90";
 #include    <X11/Xlib.h>
 #include    <X11/Xresource.h>
 #include    <stdio.h>
+#include    <stdlib.h>
+
 #include    <X11/IntrinsicP.h>
 #include    <X11/cursorfont.h>
 #include    <X11/StringDefs.h>
@@ -227,12 +229,12 @@ YYSTYPE LayYYvs[YYSTACKSIZE];
 #define LayYYstacksize YYSTACKSIZE
 #line 253 "laygram.y"
 
-LayYYwrap ()
+int LayYYwrap ()
 {
     return 1;
 }
 
-LayYYsetdest (c)
+void LayYYsetdest (c)
     LayoutPtr	*c;
 {
     dest = c;
@@ -241,8 +243,7 @@ LayYYsetdest (c)
 #define YYABORT goto LayYYabort
 #define YYACCEPT goto LayYYaccept
 #define YYERROR goto LayYYerrlab
-int
-LayYYparse()
+int LayYYparse()
 {
     register int LayYYm, LayYYn, LayYYstate;
 #if YYDEBUG

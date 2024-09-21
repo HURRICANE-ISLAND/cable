@@ -4,6 +4,7 @@
 #
 #    Copyright (C) 1997-2016 by Woods Hole Oceanographic Institution (WHOI)
 #    and Jason Gobat
+#                  2024      by Hurricane Island
 #
 #    WHOI Cable is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -70,7 +71,7 @@ else ifeq ($(OS),nox)
    ZLIBS    = -lz -lm
 else
    CFLAGS = -g -DGUI -Wall -funroll-loops -I../include \
-            -DZLIB -I../widgets -I/usr/X11R6/include 
+            -DZLIB -I../widgets -I/usr/X11R6/include -I/opt/X11/include
    WOBJS   = Xcontrol.o 
    LDFLAGS  = -g  
    WIDGETS  = ../widgets/libwidgets.a

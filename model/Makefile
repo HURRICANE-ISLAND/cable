@@ -3,6 +3,7 @@
 #    analysis of oceanographic cable structures.
 #
 #    Copyright (C) 1997-2016 by Woods Hole Oceanographic Institution (WHOI)
+#                  2024      by Hurricane Island
 #    and Jason Gobat
 #
 #    WHOI Cable is free software: you can redistribute it and/or modify
@@ -50,7 +51,7 @@ LIB	= libmodel.a
 
 all:            parser.c lexer.c $(LIB)
 
-clean:;         @rm -f $(OBJS) $(LIB) core parser.output
+clean:;         @rm -f $(OBJS) $(LIB) core parser.output parser.h parser.c lexer.c
 
 $(LIB):		$(OBJS)
 		rm -f $(LIB)

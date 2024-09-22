@@ -20,17 +20,21 @@
 #    along with WHOI Cable.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+CC = gcc
+WARN = -w
+# WARN = -Wall
+CFLAGS = $(WARN) -O2 -g -I../include -I/opt/x11/include
+
 ifeq ($(OS),OSX-universal)
-    CFLAGS = -Wall -O2 -g -I../include \
+    CFLAGS = -Wall -O2 -g -I../include -I/opt/x11/include \
              -force_cpusubtype_ALL -mmacosx-version-min=10.4 \
              -arch i386 -arch ppc
 else ifeq ($(OS),OSX)
-    CFLAGS = -Wall -O2 -g -I../include -mmacosx-version-min=10.4
+    CFLAGS = -Wall -O2 -g -I../include -I/opt/x11/include \
+             -mmacosx-version-min=10.4
 else
-    # CFLAGS = -Wall -O2 -g -I../include -I/opt/x11/include
     CFLAGS = -O2 -g -I../include -I/opt/x11/include
 endif
-
 LIB	= libwidgets.a
 OBJS = post.o tabgroup.o scroll.o util.o outputdialog.o \
  Layout.o laylex.o laygram.o 
@@ -39,10 +43,10 @@ clean:
 	@rm -f $(OBJS) $(LIB)
 
 $(LIB): $(OBJS)
-	rm -f $@
-	ar cq $@ $^
-	ranlib $@
+	@rm -f $@
+	@ar cq $@ $^
+	@ranlib $@
 
-all: $(OBJS)
+all: $(LIB)
 
-.PHONY: test
+.PHONY: all

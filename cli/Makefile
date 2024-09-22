@@ -20,96 +20,77 @@
 #    along with WHOI Cable.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-TAR 	 = tar
-AR	 = ar cq
-RANLIB   = ranlib
-CC	 = gcc
-LD	 = gcc
+TAR = tar
+CC = gcc
+LD = gcc
 
-ifeq ($(MAKECMDGOALS),api)
-   CFLAGS   = -O2 -Wall -funroll-loops -I../include -DHAVELAMP -DAPI
-   LIBFLAGS = -O2 -Wall -I../include
-else ifeq ($(OS),windows)
-#   CC = i686-pc-mingw32-gcc-4.5.2
-#   LD = i686-pc-mingw32-gcc-4.5.2
-#   CC = x86_64-w64-mingw32-gcc-4.9.2
-#   LD = x86_64-w64-mingw32-gcc-4.9.2
-	CC = gcc
-   LD = gcc
+ifeq ($(OS),windows)
    CFLAGS   = -O6 -Wall -funroll-loops -I../include -DWINGUI \
               -DZLIB -mms-bitfields 
    LDFLAGS = -mwindows 
    WOBJS   = WinControl.o winres.o
-#   WOBJS   = 
-   XLIBS   = 
-#   ZLIBS    = -L/cygdrive/c/gtk/lib -lz
+   XLIBS   =
    ZLIBS    = -lz
 else ifeq ($(OS),OSX)
-   CFLAGS  = -g -O2 -Wall -funroll-loops -I../include \
-             -DZLIB -DGUI -I../widgets -mmacosx-version-min=10.4
-   WOBJS   = Xcontrol.o 
+   CFLAGS = -g -O2 -Wall -funroll-loops -I../include \
+             -DZLIB -DGUI -I../widgets -I/opt/x11/include -mmacosx-version-min=10.4
+   WOBJS = Xcontrol.o 
    LDFLAGS = -mmacosx-version-min=10.4 
-   WIDGETS  = ../widgets/libwidgets.a
-   XLIBS    = -L/usr/X11R6/lib -lXaw -lXmu -lXt -lX11
-   ZLIBS   = -lz
+   WIDGETS = ../widgets/libwidgets.a
+   XLIBS = -L/usr/X11R6/lib -lXaw -lXmu -lXt -lX11
+   ZLIBS = -lz
 else ifeq ($(OS),OSX-universal)
-   CFLAGS = -O2 -Wall -funroll-loops -I../include \
+   CFLAGS = -O2 -Wall -funroll-loops -I../include -I/opt/x11/include \
             -force_cpusubtype_ALL -mmacosx-version-min=10.4 \
-            -arch i386 -arch ppc -DZLIB 
-   WOBJS   = Xcontrol.o 
+            -arch i386 -arch ppc -DZLIB
+   WOBJS   = Xcontrol.o
    LDFLAGS = -force_cpusubtype_ALL -mmacosx-version-min=10.4 \
              -arch i386 -arch ppc
-   WIDGETS  = 
-   XLIBS    = 
-   ZLIBS   = -lz
+   WIDGETS =
+   XLIBS =
+   ZLIBS = -lz
 else ifeq ($(OS),nox)
    CFLAGS = -g -Wall -funroll-loops -I../include -DZLIB 
-   WOBJS  = 
-   XLIBS  =
+   WOBJS =
+   XLIBS =
    WIDGETS =
-   LDFLAGS  = -g -static 
-   ZLIBS    = -lz -lm
+   LDFLAGS = -g -static 
+   ZLIBS = -lz -lm
 else
    CFLAGS = -g -DGUI -Wall -funroll-loops -I../include \
-            -DZLIB -I../widgets -I/usr/X11R6/include -I/opt/X11/include
+            -DZLIB -I../widgets -I/usr/X11R6/include
    WOBJS   = Xcontrol.o 
    LDFLAGS  = -g  
    WIDGETS  = ../widgets/libwidgets.a
    XLIBS    = -L/usr/X11R6/lib -lXaw -lXmu -lXt -lX11 
    ZLIBS    = -lz -lm
-#   LAMP	    = ../LAMP/lamp_whoi.a -lg2c
 endif
 
-OBJS	= cli.o error.o options.o
-
+OBJS = cli.o error.o options.o
 ASCOBJS = res2asc.o options.o errtxt.o 
 MATOBJS = res2mat.o options.o basename.o errtxt.o
+LIBS = ../solver/libsolver.a ../model/libmodel.a ../results/libresults.a
 
-LIBS	= ../solver/libsolver.a ../model/libmodel.a ../results/libresults.a
-RESLIBS = ../solver/libsolver.a ../results/libresults.a ../model/libmodel.a
+PROG = cable res2mat res2asc
 
-PROG	= cable res2mat res2asc
+all: cable res2mat res2asc
 
-all:           	cable res2mat res2asc
+cable: $(OBJS) $(LIBS) $(WOBJS)
+	$(CC) -o cable $(LDFLAGS) $^ $(WIDGETS) $(XLIBS) $(ZLIBS) $(DEBUGLIBS)
 
-cable:          $(OBJS) $(LIBS) $(WIDGETS) $(WOBJS)
-		$(CC) -o cable $(LDFLAGS) $(OBJS) $(WOBJS) $(LIBS) $(WIDGETS) $(XLIBS) $(ZLIBS) $(DEBUGLIBS) $(LAMP) 
+res2mat: $(MATOBJS) $(LIBS)
+	$(CC) -o res2mat $(LDFLAGS) $^ $(ZLIBS) 
 
-res2mat:    $(MATOBJS) $(RESLIBS) $(LIBS)
-		$(CC) -static -o res2mat $(LDFLAGS) $(MATOBJS) $(RESLIBS) $(ZLIBS) 
+res2asc: $(ASCOBJS) $(LIBS)
+	$(CC) $(LDFLAGS) -o res2asc $^ $(ZLIBS)
 
-res2asc:    $(ASCOBJS) $(RESLIBS) $(LIBS)
-		$(CC) $(LDFLAGS) -static -o res2asc $(ASCOBJS) $(RESLIBS) $(ZLIBS)
+api: api.o $(OBJS) $(LIBS)
+	rm -f libcable.a
+	ar cq libcable.a api.o $(OBJS)
+	ranlib libcable.a
 
-api:		api.o $(OBJS) $(LIBS)
-		rm -f libcable.a
-		$(AR) libcable.a api.o $(OBJS)
-		$(RANLIB) libcable.a
-					
-winres.o:	WinControl.rc
-		windres -i WinControl.rc -o winres.o
+winres.o: WinControl.rc
+	windres -i WinControl.rc -o winres.o
 
-clean:;         @rm -f $(OBJS) $(ASCOBJS) $(MATOBJS) $(PROG) cli.o driver.o api.o WinControl.o Xcontrol.o core winres.o *.core
-
-realclean:;     @rm -f $(OBJS) $(PROG) core; 
-
+clean:
+	@rm -f $(OBJS) $(ASCOBJS) $(MATOBJS) $(PROG) cli.o driver.o api.o WinControl.o Xcontrol.o core winres.o *.core

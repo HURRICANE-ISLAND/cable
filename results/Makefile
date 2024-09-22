@@ -4,6 +4,7 @@
 #
 #    Copyright (C) 1997-2016 by Woods Hole Oceanographic Institution (WHOI)
 #    and Jason Gobat
+#                  2024      by Hurricane Island
 #
 #    WHOI Cable is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,11 +20,10 @@
 #    along with WHOI Cable.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-CC	 = gcc
+CC = gcc
 ifeq ($(OS),windows)
-   CC = gcc
-   CFLAGS   = -O2 -Wall -funroll-loops -I../include -DZLIB -DWINGUI \
-              -mms-bitfields
+    CFLAGS = -O2 -Wall -funroll-loops -I../include -DZLIB -DWINGUI \
+            -mms-bitfields
 else ifeq ($(OS),OSX-universal)
     CFLAGS = -g -O2 -Wall -I../include -DZLIB -DGUI \
              -force_cpusubtype_ALL -mmacosx-version-min=10.4 \
@@ -32,20 +32,17 @@ else
     CFLAGS = -g -DZLIB -DGUI -Wall -I../include
 endif
 
-AR	 = ar cq
-RANLIB	 = ranlib
+LIB = libresults.a
+OBJS = results.o rotate.o res2mat.o
 
-OBJS	= results.o rotate.o res2mat.o
+$(LIB): $(OBJS)
+	rm -f $@
+	ar cq $@ $^
+	ranlib $@
 
-LIB	= libresults.a
+all: $(LIB)
 
+clean:
+	@rm -f $(OBJS) $(LIB) core
 
-all:            $(LIB)
-
-clean:;         @rm -f $(OBJS) $(LIB) core
-
-$(LIB):		$(OBJS)
-		rm -f $(LIB)
-		$(AR) $(LIB) $(OBJS)
-		$(RANLIB) $(LIB)
-
+.PHONY: all clean

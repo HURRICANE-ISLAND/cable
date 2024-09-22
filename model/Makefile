@@ -20,9 +20,8 @@
 #    along with WHOI Cable.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-CC	 = gcc
+CC = gcc
 ifeq ($(OS),windows)
-   CC = gcc
    CFLAGS   = -O6 -Wall -funroll-loops -I../include -DZLIB -DWINGUI \
               -DWINDOWS -mms-bitfields
 else ifeq ($(OS),OSX-universal)
@@ -35,33 +34,29 @@ else
     CFLAGS = -g -Wall -I../include -DZLIB
 endif
 
-AR	 = ar cq
-RANLIB	 = ranlib
-LEX	 = flex
+LEX = flex
 YACC = bison
-LFLAGS	 = -L -i -PCable_ 
-YFLAGS   = -o parser.c -d -v -p Cable_ 
-
-OBJS	= problem.o code.o objects.o \
+LFLAGS = -L -i -PCable_
+YFLAGS = -o parser.c -d -v -p Cable_
+LIB = libmodel.a
+OBJS = problem.o code.o objects.o \
           parser.o lexer.o Tree.o file.o \
           nodes.o segments.o setup.o check.o buoyancy.o tension.o
 
-LIB	= libmodel.a
+clean:
+	@rm -f $(OBJS) $(LIB) core parser.output parser.h parser.c lexer.c
 
+$(LIB): $(OBJS)
+	@rm -f $@
+	ar cq $@ $^
+	ranlib $@
 
-all:            parser.c lexer.c $(LIB)
+all: parser.c lexer.c $(LIB)
 
-clean:;         @rm -f $(OBJS) $(LIB) core parser.output parser.h parser.c lexer.c
+parser.c: parser.y
+	$(YACC) -o parser.c -d -v -p Cable_ parser.y
 
-$(LIB):		$(OBJS)
-		rm -f $(LIB)
-		$(AR) $(LIB) $(OBJS)
-		$(RANLIB) $(LIB)
-
-parser.c:   parser.y
-			$(YACC) -o parser.c -d -v -p Cable_ parser.y
-
-lexer.c:    parser.y lexer.l
+lexer.c: parser.y lexer.l
 
 Tree.o: Tree.c ../include/Tree.h ../include/Item.h 
 
@@ -93,3 +88,5 @@ problem.o: problem.c ../include/error.h \
  ../include/problem.h ../include/Tree.h ../include/Item.h \
  ../include/model.h ../include/code.h ../include/allocate.h \
  ../include/malloc.h
+
+.PHONY: all clean

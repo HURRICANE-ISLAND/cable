@@ -54,15 +54,15 @@ else ifeq ($(OS),nox)
    WOBJS =
    XLIBS =
    WIDGETS =
-   LDFLAGS = -g -static 
+   LDFLAGS = -g
    ZLIBS = -lz -lm
 else
    CFLAGS = -g -DGUI -Wall -funroll-loops -I../include \
             -DZLIB -I../widgets -I/usr/X11R6/include
-   WOBJS   = Xcontrol.o 
-   LDFLAGS  = -g  
+   WOBJS   = Xcontrol.o
+   LDFLAGS  = -g
    WIDGETS  = ../widgets/libwidgets.a
-   XLIBS    = -L/usr/X11R6/lib -lXaw -lXmu -lXt -lX11 
+   XLIBS    = -L/usr/X11R6/lib -lXaw -lXmu -lXt -lX11
    ZLIBS    = -lz -lm
 endif
 

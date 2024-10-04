@@ -35,7 +35,7 @@ else ifeq ($(OS),OSX)
                  -I/Library/Frameworks/Cairo.framework/Headers 
     GTK_LIBS      = -lz -framework Gtk -framework GLib -framework Cairo \
                     -lgtkextra-osx-2.0
-    EXTRA_CFLAGS = -g -O2 -Wall -funroll-loops -I../include -DZLIB -mmacosx-version-min=10.4
+    EXTRA_CFLAGS = -g -O2 -Wall -funroll-loops -I../include  -DZLIB -mmacosx-version-min=10.4
     AVCODEC_FLAGS = 
     AVCODEC_LIBS = 
     LDFLAGS = -g -mmacosx-version-min=10.4
@@ -50,13 +50,13 @@ endif
 
 CFLAGS  = $(GTK_CFLAGS) $(EXTRA_CFLAGS) $(AVCODEC_FLAGS)
 
-LIBS    = ../solver/libsolver.a ../model/libmodel.a ../results/libresults.a $(AVCODEC_LIBS) $(GTK_LIBS) -lm
+LIBS = ../solver/libsolver.a ../model/libmodel.a ../results/libresults.a $(AVCODEC_LIBS) $(GTK_LIBS) -lm
 
-all:    wcable 
+all: wcable
 
 wcable: $(OBJS) $(WINOBJS) wcable.o 
-		$(CC) -o wcable wcable.o $(OBJS) $(WINOBJS) $(EXTRA_LDFLAGS) $(LDFLAGS) $(LIBS) 
-		-rm -f svn_version.h
+	$(CC) -o wcable wcable.o $(OBJS) $(WINOBJS) $(EXTRA_LDFLAGS) $(LDFLAGS) $(LIBS)
+	-rm -f svn_version.h
 
 resources.o: resources.rc bundle/wcable.ico
 	windres -i resources.rc -o resources.o 
@@ -73,4 +73,4 @@ svn_version.h:
 	cat svn_version.h
 
 clean:
-		rm -f *.o wcable wcable.exe
+	@rm -f *.o wcable wcable.exe
